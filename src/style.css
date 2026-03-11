@@ -1,0 +1,385 @@
+/* Dashboard Layout */
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Roboto Mono', monospace;
+  background-color: #050505;
+  color: #e0e0e0;
+  height: 100vh;
+}
+
+.dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 340px;
+  background: #111;
+  border-right: 1px solid #333;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h1.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8em;
+  color: #ff3333;
+  margin: 0 0 10px 0;
+  text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);
+  text-align: center;
+}
+
+/* Control Groups */
+.control-group {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #888;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+select {
+  width: 100%;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: 'Roboto Mono', monospace;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: 1px solid #ff3333;
+}
+
+/* Action Buttons Group */
+.actions {
+  margin-top: auto;
+  /* Push to bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: none;
+  background: transparent;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.action-btn.primary {
+  background: #ff3333;
+  color: #000;
+}
+
+.action-btn.primary:hover {
+  background: #ff5555;
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+}
+
+.action-btn.primary.active {
+  background: #ff0000;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.action-btn.secondary {
+  background: #333;
+  color: #bbb;
+  border: 1px solid #444;
+}
+
+.action-btn.secondary:hover {
+  background: #444;
+  color: #fff;
+}
+
+/* Preview Area */
+.preview-area {
+  flex-grow: 1;
+  position: relative;
+  /* background: #000; */
+  /* Removed to show canvas behind */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  /* Let clicks pass to canvas if needed, or keeps layout stable */
+}
+
+/* Canvas Wrapper - ensures canvas fits but can expand */
+#canvas-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#ganzflicker-overlay {
+  position: fixed;
+  /* Fixed to cover viewport regardless of grid */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  /* Above basic body background */
+  pointer-events: none;
+  /* Let clicks pass through */
+}
+
+#app {
+  position: relative;
+  z-index: 10;
+  /* UI above canvas */
+}
+
+/* Fullscreen override */
+body:fullscreen .sidebar {
+  display: none;
+}
+
+body:fullscreen .preview-area {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Sliders & Presets (Keep mostly same but adjust colors) */
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#freq-slider,
+#pattern-speed,
+#pattern-flow,
+#pattern-opacity,
+#pattern-rotation {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #444;
+}
+
+#freq-slider::-webkit-slider-thumb,
+#pattern-speed::-webkit-slider-thumb,
+#pattern-flow::-webkit-slider-thumb,
+#pattern-opacity::-webkit-slider-thumb,
+#pattern-rotation::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.micro-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #222;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+#freq-value {
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.1em;
+  color: #fff;
+  font-weight: bold;
+}
+
+.micro-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.micro-btn:hover {
+  background: #555;
+}
+
+.micro-btn:active {
+  background: #ff3333;
+  border-color: #ff3333;
+}
+
+.freq-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.preset-row {
+  display: flex;
+  gap: 5px;
+}
+
+.preset-label {
+  font-size: 0.65em;
+  color: #666;
+  text-transform: uppercase;
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+
+.freq-btn {
+  font-size: 0.75em;
+  padding: 6px 10px;
+  background: #252525;
+  border: 1px solid #444;
+  color: #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.freq-btn.active {
+  background: #ff3333;
+  color: #000;
+  border-color: #ff3333;
+}
+
+.freq-btn:hover:not(.active) {
+  background: #333;
+  color: #fff;
+}
+
+/* 
+   Removed Sidebar Grid on Body to fix layout collision.
+   App uses Flexbox which is stable. 
+*/
+body.sidebar-hidden .sidebar {
+  display: none;
+}
+
+body.sidebar-hidden .preview-area {
+  width: 100vw;
+  /* Ensure full width when sidebar hidden */
+}
+
+.color-presets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.preset-btn {
+  background: #252525;
+  border: 1px solid #444;
+  color: #aaa;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.preset-btn:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+.preset-btn.active {
+  border-color: #ff3333;
+  background: #ff3333;
+  color: #000;
+}
+
+/* Audio Controls */
+.audio-controls select {
+  margin-bottom: 5px;
+}
+
+.audio-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #444;
+}
+
+.audio-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #00cccc;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 204, 204, 0.4);
+}
+
+.audio-value {
+  font-size: 0.8em;
+  color: #00cccc;
+  text-align: right;
+  min-width: 60px;
+}
+
+.action-btn.audio-btn {
+  background: #1a3a3a;
+  color: #00cccc;
+  border: 1px solid #00cccc;
+}
+
+.action-btn.audio-btn:hover {
+  background: #204a4a;
+  box-shadow: 0 0 10px rgba(0, 204, 204, 0.3);
+}
+
+.action-btn.audio-btn.active {
+  background: #00cccc;
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 204, 204, 0.5);
+}
+
+.warning {
+  font-size: 0.7em;
+  color: #662222;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.4;
+}

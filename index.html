@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ganzflicker Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- Sidebar Toggle -->
+  <button id="toggle-sidebar-btn" class="icon-btn"
+    style="position: fixed; top: 10px; right: 10px; z-index: 2000; background: rgba(0,0,0,0.5); border: 1px solid #444; color: white;">
+    ☰
+  </button>
+
+  <div id="app" class="dashboard">
+    <aside class="sidebar">
+      <h1 class="logo">Ganzflicker FX</h1>
+
+      <div class="control-group">
+        <label>Experience Mode (Adaptive)</label>
+        <select id="mode-select" class="highlight-select">
+          <option value="manual">Manual Control</option>
+          <option value="hallucinate">Deep Hallucination (7.5Hz Adaptive)</option>
+          <option value="meditate">Zen Meditation (Alpha -> Theta)</option>
+          <option value="psychedelic">Psychedelic Trip (Chaos)</option>
+          <option value="theta-deep">Theta Deep Session</option>
+          <option value="adhd-focus">ADHD Focus (40Hz Gamma)</option>
+          <option value="adhd-protocol">ADHD Protocol (22min Phased)</option>
+          <option value="adhd-alpha">ADHD Alpha Boost (10Hz)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Frequency (Hz)</label>
+        <div class="slider-container">
+          <input type="range" id="freq-slider" min="1" max="60" step="0.5" value="7.5">
+          <div class="micro-controls">
+            <button class="micro-btn" id="freq-minus">-</button>
+            <span id="freq-value">7.50 Hz</span>
+            <button class="micro-btn" id="freq-plus">+</button>
+          </div>
+        </div>
+        <div class="freq-presets">
+          <label class="preset-label">Low Freq (Delta/Theta)</label>
+          <div class="preset-row">
+            <button class="freq-btn" data-freq="1">1 Hz</button>
+            <button class="freq-btn" data-freq="2">2 Hz</button>
+            <button class="freq-btn" data-freq="3">3 Hz</button>
+            <button class="freq-btn" data-freq="4">4 Hz</button>
+          </div>
+          <label class="preset-label">Standard (Alpha/Beta/Gamma)</label>
+          <div class="preset-row">
+            <button class="freq-btn" data-freq="6">Theta 6</button>
+            <button class="freq-btn warning-text" data-freq="7.5">GANZ 7.5</button>
+            <button class="freq-btn" data-freq="10">Alpha 10</button>
+            <button class="freq-btn" data-freq="20">Beta 20</button>
+            <button class="freq-btn" data-freq="40">Gamma 40</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Colors</label>
+        <div class="color-presets">
+          <button class="preset-btn active" data-colors="red,black">Red/Black</button>
+          <button class="preset-btn" data-colors="white,green">White/Green</button>
+          <button class="preset-btn" data-colors="darkviolet,indigo">Violet/Indigo</button>
+          <button class="preset-btn" data-colors="cyan,black">Cyan/Black</button>
+          <button class="preset-btn" data-colors="#ffbf00,#1a0a00">Amber/Dark</button>
+          <button class="preset-btn" data-colors="#ff6633,#330000">Soft Red/Dark</button>
+        </div>
+        <div class="slider-group" style="margin-top: 12px;">
+          <label style="font-size: 0.7em;">Brightness</label>
+          <div class="slider-container">
+            <input type="range" id="brightness-slider" min="5" max="100" step="1" value="100">
+            <span id="brightness-value" style="font-size: 0.8em; color: #aaa; min-width: 40px; text-align: right;">100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Texture / Pattern</label>
+        <select id="pattern-select">
+          <option value="none">None (Solid)</option>
+          <option value="grid">Kaleido Grid</option>
+          <option value="noise">Living Noise</option>
+          <option value="pulse-circle">Ripple Pulse</option>
+        </select>
+
+        <div id="noise-type-container" style="margin-top: 10px; display: none;">
+          <label style="font-size: 0.7em;">Evolution Profile</label>
+          <select id="noise-type">
+            <option value="perlin">Cloudy (Perlin)</option>
+            <option value="liquid">Liquid (Distorted)</option>
+            <option value="zebra">Living Zebra (Stripes)</option>
+            <option value="pink">Deep Static (Pink)</option>
+            <option value="white">White Static</option>
+          </select>
+        </div>
+
+        <div class="slider-group" style="margin-top: 15px;">
+          <label style="font-size: 0.7em;">Pattern Speed</label>
+          <input type="range" id="pattern-speed" min="0" max="5" step="0.1" value="1">
+        </div>
+
+        <div class="slider-group" style="margin-top: 10px;">
+          <label style="font-size: 0.7em;">Pattern Flow / Complexity</label>
+          <input type="range" id="pattern-flow" min="0" max="100" step="1" value="50">
+        </div>
+
+        <div class="slider-group" style="margin-top: 10px;">
+          <label style="font-size: 0.7em;">Pattern Opacity / Intensity</label>
+          <input type="range" id="pattern-opacity" min="0" max="1" step="0.05" value="0.5">
+        </div>
+
+        <div class="slider-group" style="margin-top: 10px;">
+          <label style="font-size: 0.7em;">Rotate / Spiral (- to +)</label>
+          <input type="range" id="pattern-rotation" min="-2" max="2" step="0.1" value="0">
+        </div>
+
+        <div class="control-group"
+          style="margin-top: 15px; display: flex; align-items: center; gap: 10px; background: #222; border: 1px solid #444;">
+          <input type="checkbox" id="auto-evolve" style="width: 20px; height: 20px; accent-color: #ff3333;">
+          <label for="auto-evolve" style="margin: 0; cursor: pointer; font-size: 0.8em; color: #ccc;">Auto-Evolve
+            (Living Patterns)</label>
+        </div>
+
+        <div class="control-group"
+          style="margin-top: 5px; display: flex; align-items: center; gap: 10px; background: #222; border: 1px solid #444;">
+          <input type="checkbox" id="sync-noise" style="width: 20px; height: 20px; accent-color: #ff3333;">
+          <label for="sync-noise" style="margin: 0; cursor: pointer; font-size: 0.8em; color: #ccc;">Sync Noise with
+            Flicker</label>
+        </div>
+      </div>
+
+      <div class="control-group audio-controls">
+        <label>Audio Stimulation</label>
+        <select id="audio-mode-select">
+          <option value="off">Off</option>
+          <option value="panning-noise">Panning Noise</option>
+          <option value="binaural">Binaural Beat</option>
+          <option value="isochronic">Isochronic Tone</option>
+        </select>
+
+        <div class="slider-group" style="margin-top: 12px;">
+          <label style="font-size: 0.7em;">Audio Frequency (Entrainment Rate)</label>
+          <div class="slider-container">
+            <input type="range" id="audio-freq-slider" class="audio-slider" min="1" max="60" step="0.5" value="40">
+            <span id="audio-freq-value" class="audio-value">40.0 Hz</span>
+          </div>
+        </div>
+
+        <div id="pan-source-container" style="margin-top: 10px; display: none;">
+          <label style="font-size: 0.7em;">Panning Sound Source</label>
+          <select id="pan-source-select">
+            <option value="pink-noise">Pink Noise (ASMR Static)</option>
+            <option value="white-noise">White Noise (Hiss)</option>
+            <option value="brown-noise">Brown Noise (Deep Rumble)</option>
+            <option value="tone">Sine Tone</option>
+            <option value="sawtooth">Sawtooth Tone</option>
+            <option value="custom">Custom Audio File</option>
+          </select>
+          <div id="custom-audio-container" style="margin-top: 8px; display: none;">
+            <label for="audio-file-input" class="action-btn audio-btn" style="display: block; text-align: center; padding: 10px; cursor: pointer; font-size: 0.8em;">
+              Load Audio File (MP3/WAV/OGG)
+            </label>
+            <input type="file" id="audio-file-input" accept="audio/*" style="display: none;">
+            <div id="audio-file-name" style="font-size: 0.7em; color: #00cccc; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></div>
+            <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="audio-loop" checked style="width: 18px; height: 18px; accent-color: #00cccc;">
+              <label for="audio-loop" style="margin: 0; cursor: pointer; font-size: 0.7em; color: #aaa;">Loop Audio</label>
+            </div>
+          </div>
+        </div>
+
+        <div id="pan-speed-container" class="slider-group" style="margin-top: 10px; display: none;">
+          <label style="font-size: 0.7em;">Pan Speed (L↔R Swoop Rate)</label>
+          <div class="slider-container">
+            <input type="range" id="pan-speed-slider" class="audio-slider" min="0.1" max="20" step="0.1" value="2">
+            <span id="pan-speed-value" class="audio-value">2.0 Hz</span>
+          </div>
+          <div style="margin-top: 5px; display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="sync-pan-flicker" style="width: 18px; height: 18px; accent-color: #00cccc;">
+            <label for="sync-pan-flicker" style="margin: 0; cursor: pointer; font-size: 0.7em; color: #00cccc;">Sync Pan Speed to Flicker Hz</label>
+          </div>
+        </div>
+
+        <div id="carrier-freq-container" class="slider-group" style="margin-top: 10px; display: none;">
+          <label style="font-size: 0.7em;">Carrier Frequency (Base Tone)</label>
+          <div class="slider-container">
+            <input type="range" id="carrier-freq-slider" class="audio-slider" min="100" max="2000" step="10" value="1000">
+            <span id="carrier-freq-value" class="audio-value">1000 Hz</span>
+          </div>
+        </div>
+
+        <div class="slider-group" style="margin-top: 10px;">
+          <label style="font-size: 0.7em;">Volume</label>
+          <div class="slider-container">
+            <input type="range" id="audio-volume-slider" class="audio-slider" min="0" max="100" step="1" value="15">
+            <span id="audio-volume-value" class="audio-value">15%</span>
+          </div>
+        </div>
+
+        <button id="toggle-audio-btn" class="action-btn audio-btn" style="margin-top: 12px;">Audio: OFF</button>
+      </div>
+
+      <div class="control-group audio-controls">
+        <label>YouTube Audio Downloader</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="yt-url-input" placeholder="Paste YouTube URL..."
+            style="flex: 1; background: #222; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; font-family: 'Roboto Mono', monospace; font-size: 0.75em;">
+          <button id="yt-download-btn" class="action-btn audio-btn" style="width: auto; padding: 8px 12px; font-size: 0.75em;">DL</button>
+        </div>
+        <div id="yt-progress" style="font-size: 0.65em; color: #888; margin-top: 6px; max-height: 60px; overflow-y: auto; word-break: break-all;"></div>
+        <div id="yt-files-list" style="margin-top: 8px;"></div>
+      </div>
+
+      <div class="control-group actions">
+        <div class="button-row" style="display: flex; gap: 10px;">
+          <button id="toggle-flicker-btn" class="action-btn primary">Flicker: OFF</button>
+          <button id="toggle-pattern-btn" class="action-btn secondary">Pattern: OFF</button>
+        </div>
+        <button id="fullscreen-btn" class="action-btn secondary" style="margin-top: 10px;">Go Fullscreen</button>
+      </div>
+
+      <p class="warning">WARNING: Flashing lights. Do not use if sensitive to photosensitive epilepsy.</p>
+    </aside>
+
+    <main class="preview-area">
+      <div id="canvas-wrapper">
+        <canvas id="ganzflicker-overlay"></canvas>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
